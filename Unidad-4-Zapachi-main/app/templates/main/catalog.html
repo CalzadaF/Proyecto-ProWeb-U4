@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">Catálogo de Productos</h1>
+    
+    <div class="row">
+        {% for producto in productos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ producto.url_imagen or url_for('static', filename='img/sin-imagen.jpg') }}" 
+                     class="card-img-top" alt="{{ producto.nombre }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text">{{ producto.descripcion|truncate(100) }}</p>
+                    <p class="text-primary fw-bold">${{ "%.2f"|format(producto.precio) }}</p>
+                    {% if producto.stock > 0 %}
+                        <span class="badge bg-success">Disponible</span>
+                    {% else %}
+                        <span class="badge bg-danger">Agotado</span>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ url_for('productos.detalle_producto', id=producto.id) }}" 
+                       class="btn btn-outline-primary">
+                        Ver Detalles
+                    </a>
+                    {% if producto.stock > 0 %}
+                        <button class="btn btn-primary agregar-carrito" 
+                                data-producto-id="{{ producto.id }}">
+                            Añadir al Carrito
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.agregar-carrito').forEach(button => {
+    button.addEventListener('click', function() {
+        const productoId = this.dataset.productoId;
+        fetch('/api/carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                producto_id: productoId,
+                cantidad: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exito) {
+                alert('Producto añadido al carrito');
+            } else {
+                alert('Error al añadir al carrito');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

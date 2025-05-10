@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <h2 class="mb-4">
+        {% if form.id.data %}Editar{% else %}Agregar{% endif %} Producto
+    </h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {{ formulario.hidden_tag() }}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ formulario.nombre.label(class="form-label") }}
+                        {{ formulario.nombre(class="form-control") }}
+                        {% for error in formulario.nombre.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {{ formulario.categoria.label(class="form-label") }}
+                        {{ formulario.categoria(class="form-select") }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ formulario.precio.label(class="form-label") }}
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            {{ formulario.precio(class="form-control") }}
+                        </div>
+                        {% for error in formulario.precio.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {{ formulario.stock.label(class="form-label") }}
+                        {{ formulario.stock(class="form-control") }}
+                        {% for error in formulario.stock.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    {{ formulario.descripcion.label(class="form-label") }}
+                    {{ formulario.descripcion(class="form-control", rows=3) }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ formulario.url_imagen.label(class="form-label") }}
+                    {{ formulario.url_imagen(class="form-control") }}
+                    {% if form.id.data and producto.url_imagen %}
+                        <div class="mt-2">
+                            <img src="{{ producto.url_imagen }}" alt="Imagen actual" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('administrador.gestionar_productos') }}" class="btn btn-secondary me-md-2">
+                        Cancelar
+                    </a>
+                    {{ formulario.enviar(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

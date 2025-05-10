@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <h2 class="mb-4">Panel de Administración</h2>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios Registrados</h5>
+                    <p class="card-text display-4">{{ total_usuarios }}</p>
+                    <a href="{{ url_for('administrador.gestionar_usuarios') }}" class="text-white">Ver usuarios</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Productos en Inventario</h5>
+                    <p class="card-text display-4">{{ total_productos }}</p>
+                    <a href="{{ url_for('administrador.gestionar_productos') }}" class="text-white">Ver productos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h4>Acciones Rápidas</h4>
+        </div>
+        <div class="card-body">
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{{ url_for('administrador.agregar_producto') }}" class="btn btn-primary me-md-2">
+                    Agregar Producto
+                </a>
+                <a href="{{ url_for('administrador.agregar_usuario') }}" class="btn btn-secondary">
+                    Agregar Usuario
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
